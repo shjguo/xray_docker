@@ -24,19 +24,19 @@ ENV INTERNAL_PORT=""
 ENV HOSTMODE_PORT=""
 ENV TZ=Asia/Shanghai
 
-WORKDIR /
+WORKDIR /xray
 
-COPY ./entrypoint.sh /
-COPY ./config.json /
+COPY ./entrypoint.sh /xray/
+COPY ./config.json /xray/
 
-COPY --from=builder /app/xray /
+COPY --from=builder /app/xray /xray/
 
 RUN apk add --no-cache tzdata ca-certificates jq curl libqrencode && \
     mkdir -p /var/log/xray &&\
     wget -O /geosite.dat https://github.com/v2fly/domain-list-community/releases/latest/download/dlc.dat && \
     wget -O /geoip.dat https://github.com/v2fly/geoip/releases/latest/download/geoip.dat && \
-    chmod +x /entrypoint.sh
+    chmod +x /xray/entrypoint.sh
 
 
-ENTRYPOINT ["./entrypoint.sh"]
+ENTRYPOINT ["./xray/entrypoint.sh"]
 EXPOSE 443
